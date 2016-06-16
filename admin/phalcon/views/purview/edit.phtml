@@ -1,0 +1,24 @@
+<span id="view">Views</span>
+<span id="Edit">Edit</span>
+<div id="adonis">adonis</div>
+
+<script>
+
+$('#Edit').on('click',function(){
+	CKEDITOR.replace("adonis",{ width:'950px',height:'600px' });
+})
+
+
+$('#view').on('click',function(){
+	CKEDITOR_destroy();
+})
+
+function CKEDITOR_destroy(){
+	for ( instance in CKEDITOR.instances ){
+		var changed_id = CKEDITOR.instances[instance].name;
+        CKEDITOR.instances[instance].destroy();
+        change_text($('#'+changed_id));
+	}
+
+}
+</script>

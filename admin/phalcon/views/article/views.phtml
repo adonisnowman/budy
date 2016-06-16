@@ -1,0 +1,103 @@
+<STYLE>
+TR[data-onshelf="onshelf"] BUTTON[data-click="item-onshelf"] {
+	color: #00a65a;
+}
+
+TR[data-onshelf="offshelf"] BUTTON[data-click="item-offshelf"] {
+	color: red;
+}
+
+
+.box.box-solid.box-success>.box-header  UL.dropdown-menu li a {
+	color: #777;
+}
+</STYLE>
+<div id="BodyContent" class="widget">
+
+	<div class="col-md-6">
+	<?php echo $viewContent;?>		
+	</div>
+	<div class="col-md-6">
+		<div id="Preview" class="box box-info">
+                <div class="box-header with-border">
+                  <h3 class="box-title">Preview</h3>
+                  <div class="pull-right box-tools">                   
+                 	<button class="btn btn-box-tool" data-click="box-chain" >
+						<i class="fa fa-chain" data-toggle="tooltip" data-original-title="轉繁體"></i>					
+					</button>
+					<button class="btn btn-box-tool" data-click="box-save" >
+						<i class="fa fa-save" data-toggle="tooltip" data-original-title="save"></i>					
+					</button>
+                  </div>
+                 
+                  
+                </div><!-- /.box-header -->
+                  <div class="box-body">
+                  <div class="form-group">
+                      <label>Cover</label>
+                      <textarea preview="cover" class="form-control" rows="3" placeholder="Enter ..." onchange="$(this).html(this.value);"></textarea>
+                  </div>
+                  <div class="form-group">
+                      <label>Title</label>
+                      <textarea preview="title" class="form-control" rows="3" placeholder="Enter ..." onchange="$(this).html(this.value);"></textarea>
+                  </div>
+                  <div class="form-group">
+                      <label>Memo</label>
+                      <textarea preview="memo" class="form-control" rows="3" placeholder="Enter ..." onchange="$(this).html(this.value);"></textarea>
+                  </div>  
+                  
+                  </div>
+                  <div id="preview_html" preview="content" class="box-footer" contenteditable="true" style="padding: 5px;">
+                    
+                  </div>
+                
+              </div>
+	</div>
+
+		<script>
+			
+			$('#Preview button[data-click="box-save"]').on('click',function(){
+
+				var preview = {}; 
+				$('#Preview [preview]').each(function(){						
+					preview[$(this).attr("preview")] = $(this).html();
+				});
+				
+				var id = $('#Preview').attr('data-id');
+				var url = 'article/update';
+				var info = {
+						id : id,
+						data : 'article',
+						preview : preview
+					};
+				console.info(info);
+				$.ajax({
+					url: url,
+				  cache: false,
+					dataType: 'html',
+				  type: 'POST',
+				  data:{
+					  info:info
+				  },
+				  success: function(data){	
+					  console.info(data);
+					  $('#preview_html').html('');
+					  $('#Preview [preview]').html('');
+					  boxRefresh($('#Article'));
+				  }
+				});
+				
+			});
+
+			
+			$('#Preview button[data-click="box-chain"]').on('click',function(){
+				$('#Preview [preview]').each(function(){		
+					$(this).html(Traditionalized($(this).html()));
+				});	
+			})
+			</script>
+	
+</div>
+
+
+

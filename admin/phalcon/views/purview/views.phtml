@@ -1,0 +1,77 @@
+<STYLE>
+TR[data-onshelf="onshelf"] BUTTON[data-click="item-onshelf"] {
+	color: #00a65a;
+}
+
+TR[data-onshelf="offshelf"] BUTTON[data-click="item-offshelf"] {
+	color: red;
+}
+
+.box.box-solid.box-success>.box-header  UL.dropdown-menu li a {
+	color: #777;
+}
+</STYLE>
+<div id="BodyContent" class="widget">
+
+	<div id="PurviewList" class="box box-normal box-solid collapsed-box"
+		style="max-width: 600px;">
+		<!-- 			<div class="overlay"> -->
+		<!--                   <i class="fa fa-refresh fa-spin"></i> -->
+		<!--                 </div> -->
+		<div class="box-header with-border">
+			<h3 class="box-title">Purview List</h3>
+			<div class="box-tools pull-right">
+				<div class="btn-group" data-click="box-filed"
+					data-table="PurviewList">
+					<button type="button" class="btn btn-default dropdown-toggle"
+						data-toggle="dropdown" aria-expanded="false">
+						<i class="fa fa-table" data-toggle="tooltip"
+							data-original-title="欄位顯示"></i>
+					</button>
+					<ul class="dropdown-menu"></ul>
+				</div>
+				<button class="btn btn-box-tool" data-widget="collapse">
+					<i class="fa fa-plus"></i>
+				</button>
+
+			</div>
+			<!-- /.box-tools -->
+		</div>
+		<!-- /.box-header -->
+		<div class="box-body no-padding">
+			<table class="table table-condensed" data-table="PurviewList">
+				<thead>
+					<tr>
+						<th style="width: 10px">#</th>
+						<th>Name</th>
+						<th>icon</th>
+						<th>Memo</th>
+					</tr>
+				</thead>
+				<tbody>
+                    <?php if(isset($Purview)):?>
+					<?php foreach ($Purview AS $list):?>
+					<tr data-id="<?php echo $list['id'];?>">
+						<td><?php echo $list['id'];?></td>
+						<td><?php echo $list['name'];?></td>
+						<td><i class="fa <?php echo $list['icon'];?>"
+							data-toggle="tooltip"
+							data-original-title="<?php echo $list['name'];?>"></i></td>
+						<td><?php echo $list['memo'];?></td>
+					</tr>
+					<?php endforeach;?>
+					<?php endif;?>
+                    
+                  </tbody>
+				
+			</table>
+		</div>
+	</div>
+
+
+	<?php echo $viewContent;?>
+	
+</div>
+
+
+

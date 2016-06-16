@@ -1,0 +1,84 @@
+/*icon*/
+.ie-icon{
+	background-image:url('../img/icon/77_62.png');
+	background-repeat: no-repeat;
+	width: 32px;
+	height: 32px;
+}
+/*config*/
+.ie-icon-config{
+	background-position:-154px -124px;
+}
+.ie-icon-config:hover{
+	background-position:-77px -124px;
+}
+.ie-icon-config:active,
+.ie-icon-config:focus{
+	background-position:-77px -124px;
+}
+/*crop*/
+.ie-icon-crop{
+	background-position:-616px -558px;
+}
+.ie-icon-crop:hover{
+	background-position:-616px -558px;
+}
+.ie-icon-crop:active,
+.ie-icon-crop:focus{
+	background-position:-616px -558px;
+}
+/*search*/
+.ie-icon-search{
+	background-position:-616px 0px;
+}
+.ie-icon-search:hover{
+	background-position:-616px 0px;
+}
+.ie-icon-search:active,
+.ie-icon-search:focus{
+	background-position:-616px 0px;
+}
+/*menu*/
+.ie-icon-menu{
+	background-position:-385px -496px;
+}
+.ie-icon-menu:hover{
+	background-position:-385px -496px;
+}
+.ie-icon-menu:active,
+.ie-icon-menu:focus{
+	background-position:-385px -496px;
+}
+/*trash*/
+.ie-icon-trash{
+	background-position:-1001px -62px;
+}
+.ie-icon-trash:hover{
+	background-position:-1001px -62px;
+}
+.ie-icon-trash:active,
+.ie-icon-trash:focus{
+	background-position:-1001px -62px;
+}
+/*img*/
+.ie-icon-img{
+	background-position:0px -744px;
+}
+.ie-icon-img:hover{
+	background-position:0px -744px;
+}
+.ie-icon-img:active,
+.ie-icon-img:focus{
+	background-position:0px -744px;
+}
+/*upload*/
+.ie-icon-upload{
+	background-position:-385px -124px;
+}
+.ie-icon-upload:hover{
+	background-position:-385px -124px;
+}
+.ie-icon-upload:active,
+.ie-icon-upload:focus{
+	background-position:-385px -124px;
+}

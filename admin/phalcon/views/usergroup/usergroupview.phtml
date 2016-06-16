@@ -1,0 +1,102 @@
+<div id="UserGroupList" class="box box-normal box-solid col-md-3">
+<!-- 			<div class="overlay"> -->
+<!--                   <i class="fa fa-refresh fa-spin"></i> -->
+<!--                 </div> -->
+			<div class="box-header with-border">
+				<h3 class="box-title">UserGroup List</h3>
+				<div class="box-tools pull-right">
+					
+					<button class="btn btn-box-tool" data-widget="collapse">
+						<i class="fa fa-minus"></i>
+					</button>
+
+				</div>
+				<!-- /.box-tools -->
+			</div>
+			<!-- /.box-header -->
+			<div class="box-body no-padding">			
+				<table class="table table-condensed">
+					<thead>
+						<tr>
+							<th style="width: 10px">#</th>
+							<th>Name</th>
+							<th style="width: 120px">Purview</th>
+						</tr>
+					</thead>
+					<tbody>
+                    <?php if(isset($Usergroup)):?>
+					<?php foreach ($Usergroup AS $list):?>
+					<tr>
+							<td><?php echo $list['id'];?></td>
+							<td><?php echo $list['name'];?></td>
+							<td>
+								<button class="btn btn-box-tool">
+									<i class="fa ion-person-add"></i>
+								</button>
+								<button class="btn btn-box-tool" data-click="purviewlist_Box" data-id="<?php echo $list['id'];?>">
+									<i class="fa fa-reorder"></i>
+								</button>
+								<button class="btn btn-box-tool" data-click="<?php echo $list['onshelf_css'];?>">
+									<i class="fa fa-remove"></i>
+								</button>
+							</td>
+						</tr>
+					<?php endforeach;?>
+					<?php endif;?>
+                    
+                  </tbody>
+					<tfoot>
+						<tr>
+							<td colspan="99">
+								<div class="input-group" style="width: 100%">
+									<input class="form-control" placeholder="Type UserGroup Name ...">
+									<div class="input-group-btn">
+										<button class="btn btn-warning">
+											<i class="fa fa-plus"></i>
+										</button>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+			<script>
+function boxview(el,info){
+	if(typeof(el) =='undefined') {
+		console.info('no element');
+		return false;
+	}
+	
+	$(el).attr('data-refresh',"before").children('DIV.overlay').show();
+	var url = 'boxview/purviewlist';
+	
+	$.ajax({
+		url: url,
+	  cache: false,
+		dataType: 'html',
+	  type: 'POST',
+	  data:{
+		  info:info
+	  },
+	  success: function(data){					
+		  $(el).before(data);  
+		  $('[data-refresh="before"]').remove();			  
+	  }
+	});
+}
+
+
+		
+$('#UserGroupList button[data-click="purviewlist_Box"]').on('click',function(){
+	var info = {
+			id:$(this).attr('data-id'),
+			data:'AdminUsergroup',
+			controller:"usergroup",
+		};
+	boxview($('#purviewlist_Box'),info);
+});
+
+
+</script>
+		</div>

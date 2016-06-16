@@ -1,0 +1,122 @@
+<div id="purviewlist_Box" class="box box-normal box-solid" 
+	data-table="<?php echo $content['fromTable'];?>" 
+	data-id="<?php echo $content['id'];?>" 
+	data-controller = "<?php echo $content['controller'];?>">
+	<style>
+		
+		#example2 button {
+			color: rgb(217, 220, 222);
+		}
+		
+		#example2 button.checked {
+			color: #6B8E23;
+		}
+		
+		#example2 TBODY TD {
+			text-align: center;
+		}
+	</style>
+	<div class="overlay" style="display: none;">
+		<i class="fa fa-refresh fa-spin"></i> 
+	</div>
+	<div class="box-header with-border" >
+		<h3 class="box-title" >		
+		<?php echo $content['name']; ?>
+		</h3>
+		<div class="box-tools pull-right">
+
+			
+		</div>
+		<!-- /.box-tools -->
+	</div>
+	<!-- /.box-header -->
+	<div class="box-body no-padding" style="overflow-x:scroll; ">
+		<table id="example2"
+			class="table table-bordered table-hover dataTable" role="grid"
+			aria-describedby="example2_info">
+			<thead>
+				<tr role="row">
+
+					<th>全選/功能</th>
+                      	<?php if(isset($Purview)):?>
+						<?php foreach ($Purview AS $clist):?>
+							<th><span><?php echo $clist['name'];?></span> <i
+						class="fa <?php echo $clist['icon'];?>" data-toggle="tooltip"
+						data-original-title="<?php echo $clist['name'];?>"></i></th>	
+						<?php endforeach;?>
+						<?php endif;?>
+                      </tr>
+
+			</thead>
+			<tbody>
+                    	<?php if(isset($Controller)):?>
+					    <?php foreach ($Controller AS $list):?>
+                    	<tr role="row" class="odd"
+					data-Ctrl="<?php echo $list['id'];?>">
+					<td><i class="fa fa-check" data-click="all_row"
+						style="color: #6B8E23; float: left;"></i> <span><?php echo $list['name'];?></span>
+					</td>
+                        	<?php if(isset($Purview)):?>
+							<?php foreach ($Purview AS $clist):?>
+							<td>
+							
+								<?php  if(isset($Purviewlist[$list['id']][$clist['id']]) ): ?>
+								<button class="btn btn-box-tool <?php echo $Purviewlist[$list['id']][$clist['id']]['checked'];?>" data-click="item-views"
+									data-id="<?php echo $Purviewlist[$list['id']][$clist['id']]['id'];?>">
+									<i class="fa fa-check"></i>
+								</button>
+								
+								<?php endif;?>	
+							 </td>			
+							<?php endforeach;?>
+							<?php endif;?>
+                      	</tr>
+                      	<?php endforeach;?>
+						<?php endif;?>
+                    </tbody>
+
+		</table>
+
+	</div>
+<script>
+$('#example2 button').on('click',function(){
+	if($(this).hasClass('checked')) $(this).removeClass('checked');
+	else $(this).addClass('checked');
+
+	getPurview();
+})
+function getPurview(){
+	var purview = [];
+	$('#example2 button.checked').each(function(){
+		purview.push($(this).attr('data-id'));
+	})
+	
+	var info = { 
+			id:$('#purviewlist_Box').attr('data-id'),
+			data:$('#purviewlist_Box').attr('data-table'),
+		purview	: purview
+	}
+	
+	var url = $('#purviewlist_Box').attr('data-controller')+'/update';
+	
+	$.ajax({
+		url: url,
+	  cache: false,
+		dataType: 'html',
+	  type: 'POST',
+	  data:{
+		  info:info
+	  },
+	  success: function(data){					
+			console.info(data);
+		 // $(el).before(data);  
+		 // $('[data-refresh="before"]').remove();			  
+	  }
+	});
+}
+</script>
+</div>
+
+
+
+

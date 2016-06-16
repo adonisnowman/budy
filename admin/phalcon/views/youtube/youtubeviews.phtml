@@ -1,0 +1,293 @@
+
+		<div id="Youtube" class="box box-normal box-solid" style="max-width: 600px;min-width: 330px;">
+			<div class="overlay" style="display: none;">
+				<i class="fa fa-refresh fa-spin"></i> 
+			</div>
+			<div class="box-header with-border">
+				<h3 class="box-title">Youtube</h3>								
+				<div class="box-tools pull-right">					
+									
+					<button class="btn btn-box-tool" data-widget="collapse">					
+						<i class="fa fa-minus"></i>
+					</button>
+					
+				</div>
+				
+			</div>
+			<!-- /.box-header -->
+			<div id="insertBox" class="direct-chat-primary" data-check="">
+			<div class="input-group" style="width: 100%">
+				
+				 <select class="form-control" list-form="resolve_tag" data-type="value"  style="width: 20%;min-width: 100px;">												
+                        <option value="ol#playlist-autoscroll-list" >播放清單</option>  
+						<option value="ol.section-list" >搜尋清單</option>
+				  </select>
+				
+				
+				 <input class="form-control" list-form="youtube_url" data-type="value" style="width: auto;max-width: 440px;"
+						placeholder="Type a Youtube Url">							
+					<button class="btn btn-primary" data-click="box-search">
+						<i class="fa fa-search"></i>
+					</button>
+			</div>
+				<div class="direct-chat-msg right">
+					<button class="btn btn-primary" data-click="box-insert">
+						<i class="fa fa-plus"></i>
+					</button>
+					
+					<?php if(isset($ProductCategory)):?>
+						 <select id="ProductCategory" class="form-control" style="width: 40%;min-width: 100px;float: left;" onchange="message(this.value);">
+						 <option value="0" SELECTED >請選分類</option>
+						<?php foreach ($ProductCategory AS $list):?>								
+                        			<option value="<?php echo $list['id'];?>" ><?php echo $list['name'];?></option>  
+						<?php endforeach;?>
+						  </select>
+						<?php endif;?>
+		            <div class="direct-chat-text" data-message style="width: 40%;min-width: 100px;float: right;">
+		                 You Don`t Choose Category
+		             </div>
+	            </div>
+	                        		
+            </div>
+			<div class="box-body no-padding">
+				<table class="table table-condensed" data-table="AdminPurviewlist_List">
+					<thead>
+						<tr>
+							<th style="width: 10px">#</th>
+							<th>video id</th>
+							<th>標題</th>
+							<th>群組</th>							
+							<th>Purview</th>
+						</tr>
+					</thead>
+					<tbody>
+                    <?php if(isset($Youtube)):?>
+					<?php foreach ($Youtube AS $list):?>
+					<tr data-onshelf="<?php echo $list['onshelf_css'];?>">
+							<td> </td>	
+							<td><?php echo $list['video_id'];?></td>	
+							<td><?php if(isset($list['title'])) echo $list['title'];?> </td>							
+							<td><?php if(isset($list['ProductCategory'])) echo $list['ProductCategory'];?> </td>	
+							<td>				
+								<span>	
+								<?php if(isset($list['purviewAction'])):?>
+								<?php foreach ($list['purviewAction'] AS $action):?>
+								<button class="btn btn-box-tool" data-click="item-<?php echo $action['code'];?>" data-id="<?php echo $list['video_id'];?>"  >
+									<i class="fa <?php echo $action['icon'];?>" data-toggle="tooltip" title="" data-original-title="<?php echo $action['name'];?>"></i>
+								</button>
+								<?php endforeach;?>
+								<?php endif;?>
+							
+								</span>
+							</td>
+						</tr>
+					<?php endforeach;?>
+					<?php endif;?>
+                    
+                  </tbody>
+				  <tfoot>
+						<tr>
+							<td colspan="99">
+								
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+			
+			<script>
+			function message(value){
+				if(value>0) $('#insertBox DIV[data-message]').html('Enjoy it!');
+				else $('#insertBox DIV[data-message]').html('You Don`t Choose Category');
+			}
+			$('#Youtube button[data-click="box-insert"]').on('click',function(){
+				
+				if($('#insertBox').attr('data-check') < 1) return false;
+
+				
+				var picked = {id:[],category_id:$('#ProductCategory').val()};
+				$('#Youtube button.bg-green[data-click="item-pick"]').each(function(){
+					picked['id'].push($(this).attr('data-id'));
+				})
+				console.info(picked);
+
+				
+					 
+					var url = 'youtube/insert/';
+					$.ajax({
+						url: url,
+					  cache: false,
+						dataType: 'html',
+					  type: 'POST',
+					  data:{
+						  info:picked
+					  },
+					  success: function(data){
+						 console.info(data);
+						 boxRefresh($('#Youtube'));
+					  }
+					});
+			});
+			
+			$('#Youtube button[data-click="box-search"]').on('click',function(){
+				boxRefresh($('#Youtube'));
+				
+			});
+			
+
+			$('#Youtube button[data-click="item-delete"]').on('click',function(){
+				
+				$(this).parents('TR').appendTo($(this).parents('TBODY'));
+				$('#preview_html').html('');
+				$('#Preview [preview]').html('');
+			});
+			$('#Youtube button[data-click="item-pick"]').on('click',function(){
+				if($(this).hasClass('bg-green')){
+					$(this).removeClass('bg-green');
+
+					$(this).parents('TR').prependTo($(this).parents('TBODY'));
+				}
+				else{
+					$(this).addClass('bg-green');
+					$(this).parents('TR').appendTo($(this).parents('TBODY'));
+				} 
+				
+				$('#insertBox').attr('data-check', $('#Youtube button.bg-green[data-click="item-pick"]').length) ;
+				$('#preview_html').html('');
+				$('#Preview [preview]').html('');
+			});
+			
+			$('#Youtube button[data-click="item-search"]').on('click',function(){
+				$('#Youtube button[data-click="item-search"]').removeClass('bg-light-blue');
+				$(this).addClass('bg-light-blue');
+				var this_el = $(this);
+				
+				var id =  $(this).attr('data-id');
+				var url = 'youtube/'+this_el.attr('data-click').replace('item-','');	
+
+				$.ajax({
+					url: url,
+				  cache: false,
+					dataType: 'json',
+				  type: 'POST',
+				  data:{
+					  id : id,
+				  },
+				  success: function(data){	
+					  console.info(data);
+					  if(data){
+							$('#Preview').attr('data-id',id);
+					  		$('#preview_html').html(data['preview_html']);
+							for(var k in data['preview']){
+								$('#Preview [preview="'+k+'"]').html(data['preview'][k]);
+							}
+							Preview_autochain();
+					  }
+				  }
+				});
+				
+			});
+			
+			function boxview(eId,info){
+
+				var el = $('#'+eId+'_Box');
+				
+				if(typeof(el) =='undefined') {
+					console.info('no element');
+					return false;
+				}
+				
+				$(el).attr('data-refresh',"before").children('DIV.overlay').show();
+				var url = 'boxview/'+eId;
+				
+				$.ajax({
+					url: url,
+				  cache: false,
+					dataType: 'html',
+				  type: 'POST',
+				  data:{
+					  info:info
+				  },
+				  success: function(data){					
+					  $(el).before(data);  
+					  $('[data-refresh="before"]').remove();			  
+				  }
+				});
+			}
+			
+			
+			
+
+			function setBoxFiled(name) {
+
+				$('#'+name+' DIV[data-click="box-filed"] UL').html('');
+				
+				$('#'+name+' TABLE[data-table="'+name+'"] thead tr').find('TH').each(function(index){
+					var title=$(this).attr("title");
+					if(typeof(title) == "undefined") title=$(this).html();		
+					
+					var add_li = document.createElement('LI');
+					add_li.innerHTML='<a>'+title+'</a>';
+					
+					
+					if(typeof(title) != "undefined") {
+						$('#'+name+' DIV[data-click="box-filed"] UL').append(add_li);
+						if($(this).hasClass("rowhide")) $(add_li).addClass("rowhide");		
+					}
+					
+				    if($('#'+name+' TABLE[data-table="'+name+'"] thead th:nth-child('+(index+1)+')').hasClass("rowhide"))
+						{
+						$('#'+name+' TABLE[data-table="'+name+'"] thead th:nth-child('+(index+1)+')').hide();  
+						$('#'+name+' TABLE[data-table="'+name+'"] tbody td:nth-child('+(index+1)+')').hide();
+						}	
+				});
+
+				var items = $('#'+name+' DIV[data-click="box-filed"] UL li').click(function() {
+				    var index = items.index(this);
+				    
+				    if($('#'+name+' TABLE[data-table="'+name+'"] thead th:nth-child('+(index+1)+')').is(':visible'))
+					{ $(this).addClass("rowhide"); 
+					$('#'+name+' TABLE[data-table="'+name+'"] thead th:nth-child('+(index+1)+')').hide(); 
+					$('#'+name+' TABLE[data-table="'+name+'"] tbody td:nth-child('+(index+1)+')').hide();  }
+					else 
+					{ $(this).removeClass("rowhide"); 
+					$('#'+name+' TABLE[data-table="'+name+'"] thead th:nth-child('+(index+1)+')').show(); 
+					$('#'+name+' TABLE[data-table="'+name+'"] tbody td:nth-child('+(index+1)+')').show(); } 
+				});
+			}
+			function boxRefresh(el){
+				if(typeof(el) =='undefined') {
+					console.info('no element');
+					return false;
+				}
+				
+				$(el).attr('data-refresh',"before").children('DIV.overlay').show();
+				var url = 'youtube/views/viewContent';
+				var info = {};
+				$(el).find('[list-form]').each(function(){				
+
+					if($(this).attr('data-type') == 'value') info[$(this).attr("list-form")] = $(this).val();		
+					else info[$(this).attr("list-form")] = $(this).html();
+				});
+
+				
+				$.ajax({
+					url: url,
+				  cache: false,
+					dataType: 'html',
+				  type: 'POST',
+				  data:{
+					  info:info
+				  },
+				  success: function(data){					
+					  $(el).before(data);  
+					  $('[data-refresh="before"]').remove();
+					  setBoxFiled('Youtube');					  
+				  }
+				});
+			}
+			
+			
+			</script>
+			
+		</div>

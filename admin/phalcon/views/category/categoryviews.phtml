@@ -1,0 +1,407 @@
+		<div id="ProductCategory" class="box box-normal box-solid" style="max-width: 600px;min-width: 330px;">
+			<div class="overlay" style="display: none;">
+				<i class="fa fa-refresh fa-spin"></i> 
+			</div>
+			<div class="box-header with-border">
+				<h3 class="box-title">ProductCategory</h3>
+				<div class="box-tools pull-right">
+				 
+					<button class="btn btn-box-tool" data-click="box-sort" >
+						<i class="fa fa-sort" data-toggle="tooltip" data-original-title="sort"></i>					
+					</button>
+					<button class="btn btn-box-tool" data-click="box-search" >
+						<i class="fa fa-search" data-toggle="tooltip" data-original-title="search"></i>					
+					</button>
+					<button class="btn btn-box-tool" data-click="box-refresh" >
+						<i class="fa fa-refresh" data-toggle="tooltip" data-original-title="refresh"></i>					
+					</button>
+					<div class="btn-group" data-click="box-filed" data-table="AdminPurviewlist_List">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                       			<i class="fa fa-table" data-toggle="tooltip" data-original-title="欄位顯示"></i>	
+                            </button>
+                            <ul class="dropdown-menu" ></ul>
+                    </div>					
+					<button class="btn btn-box-tool" data-widget="collapse">					
+						<i class="fa fa-minus"></i>
+					</button>
+					
+				</div>
+				
+			</div>
+			<!-- /.box-header -->
+			
+			<div class="box-body no-padding">
+			<style>			
+			.ui-sortable-helper{
+				border: 3px dotted rgba(0, 166, 90, 0.3);
+			}
+			.ui-sortable:not(.ui-sortable-disabled){
+				background: rgba(0, 166, 90, 0.15);
+				padding: 10px;
+			}
+			</style>
+			<script>
+			$(function() {
+				$( "#ProductCategory .sortable" ).sortable();
+			    $( "#ProductCategory .sortable" ).disableSelection();
+			    $('#ProductCategory .sortable').sortable('disable');		   		
+			});
+			</script>
+				<table  class="table table-condensed" data-table="AdminPurviewlist_List">
+					<thead>
+						<tr>
+							<th style="width: 10px">#</th>	
+							<th>名稱</th>
+							<th>子層分類名稱</th>
+							<th>Purview</th>
+						</tr>
+					</thead>
+					<tbody class="sortable"  sort-id="0">
+                    <?php if(isset($ProductCategory)):?>
+					<?php foreach ($ProductCategory AS $list):?>
+					<tr data-onshelf="<?php echo $list['onshelf_css'];?>" class="ui-state-default" data-id="<?php echo $list['id'];?>" data-sort="<?php echo $list['sort'];?>">
+							<td><?php echo $list['id'];?></td>
+							<td><?php echo $list['name'];?></td>
+							<td>
+								<div class="sortable"  sort-id="<?php echo $list['id'];?>">
+								<?php foreach ($list['ChlidCategory'] AS $clist):?>
+								<span class="label label-primary ui-state-default" data-id="<?php echo $clist['id'];?>"><?php echo $clist['name'];?></span>
+								<?php endforeach;?>
+							
+								</div>
+							</td>
+							
+							<td>				
+								<span>	
+								<?php if(isset($list['purviewAction'])):?>
+								<?php foreach ($list['purviewAction'] AS $action):?>
+								<button class="btn btn-box-tool" data-click="item-<?php echo $action['code'];?>" data-id="<?php echo $list['id'];?>"  >
+									<i class="fa <?php echo $action['icon'];?>" data-toggle="tooltip" title="" data-original-title="<?php echo $action['name'];?>"></i>
+								</button>
+								<?php endforeach;?>
+								<?php endif;?>
+								<button class="btn btn-box-tool" data-click="item-sort" data-id="<?php echo $list['id'];?>"  >
+									<i class="fa fa-sort" data-toggle="tooltip" title="" data-original-title="sort"></i>
+								</button>
+								</span>
+							</td>
+							
+						</tr>
+					<?php endforeach;?>
+					<?php endif;?>
+                    
+                  </tbody>
+				  <tfoot>
+						<tr>
+							<td colspan="99">
+								<div id="insertBox" class="direct-chat-primary" data-check="">							
+									<div class="input-group" style="width: 100%">
+									<?php if(isset($ProductCategory)):?>
+									 <select id="ProductCategoryID" class="form-control" style="width: 10%;min-width: 100px;">									 
+									 <option value="0" selected="selected">設定父層分類</option>  
+									<?php foreach ($ProductCategory AS $list):?>								
+	                        			<option value="<?php echo $list['id'];?>"><?php echo $list['name'];?></option>  
+									<?php endforeach;?>
+									  </select>
+									<?php endif;?>
+									
+									 <input id="insertCategory" class="form-control" style="width: auto;max-width: 440px;"
+											placeholder="Type a Category">							
+										
+									</div>
+									<div class="direct-chat-msg right">
+										<button class="btn btn-primary" data-click="item-insert">
+												<i class="fa fa-plus"></i>
+											</button>
+		                          		<div class="direct-chat-text" data-message>
+		                            		Type a name to create category
+		                          		</div>
+	                        		</div>
+                        		</div>
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+			
+			<script>
+			
+			function boxview(eId,info){
+
+				var el = $('#'+eId+'_Box');
+				
+				if(typeof(el) =='undefined') {
+					console.info('no element');
+					return false;
+				}
+				
+				$(el).attr('data-refresh',"before").children('DIV.overlay').show();
+				var url = 'boxview/'+eId;
+				
+				$.ajax({
+					url: url,
+				  cache: false,
+					dataType: 'html',
+				  type: 'POST',
+				  data:{
+					  info:info
+				  },
+				  success: function(data){					
+					  $(el).before(data);  
+					  $('[data-refresh="before"]').remove();			  
+				  }
+				});
+			}
+			
+			$('#ProductCategory button[data-click="item-edit"]').on('click',function(){
+				var info = {
+						id:$(this).attr('data-id'),
+						data:'ProductCategory',
+						controller:"account",
+					};
+				boxview('purviewlist',info);
+			});
+			
+			
+			$('#ProductCategory button[data-click="item-onshelf"],#ProductCategory button[data-click="item-offshelf"]').on('click',function(){
+				var this_el = $(this);
+				
+				var id =  $(this).attr('data-id');
+				var url = 'category/'+this_el.attr('data-click').replace('item-','');	
+				$.ajax({
+					url: url,
+				  cache: false,
+					dataType: 'html',
+				  type: 'POST',
+				  data:{
+					  id : id,
+				  },
+				  success: function(data){	
+					  if(data == 'offshelf' || data == 'onshelf') this_el.parents('tr').attr('data-onshelf',data);
+					  else console.info('error');
+				  }
+				});
+
+			});
+			$('#insertCategory').on('keyup',function(){
+				
+				var url = 'jsonview/categorycheck';
+				var info = {
+						name:$(this).val()
+				};
+				
+				$.ajax({
+					url: url,
+				  cache: false,
+					dataType: 'json',
+				  type: 'POST',
+				  data:{
+					  info:info
+				  },
+				  success: function(data){	
+						if(data){
+
+							
+							$('#insertBox').attr('class','direct-chat-'+data['css']).attr('data-check',data['check']);
+							$('#insertBox DIV[data-message]').html(data['message']);
+							$('#insertBox button[data-click="item-insert"]').attr('class','btn btn-'+data['css'])
+						}
+					  
+				  }
+				});
+				
+			})
+			function setBoxFiled(name) {
+
+				$('#'+name+' DIV[data-click="box-filed"] UL').html('');
+				
+				$('#'+name+' TABLE[data-table="'+name+'"] thead tr').find('TH').each(function(index){
+					var title=$(this).attr("title");
+					if(typeof(title) == "undefined") title=$(this).html();		
+					
+					var add_li = document.createElement('LI');
+					add_li.innerHTML='<a>'+title+'</a>';
+					
+					
+					if(typeof(title) != "undefined") {
+						$('#'+name+' DIV[data-click="box-filed"] UL').append(add_li);
+						if($(this).hasClass("rowhide")) $(add_li).addClass("rowhide");		
+					}
+					
+				    if($('#'+name+' TABLE[data-table="'+name+'"] thead th:nth-child('+(index+1)+')').hasClass("rowhide"))
+						{
+						$('#'+name+' TABLE[data-table="'+name+'"] thead th:nth-child('+(index+1)+')').hide();  
+						$('#'+name+' TABLE[data-table="'+name+'"] tbody td:nth-child('+(index+1)+')').hide();
+						}	
+				});
+
+				var items = $('#'+name+' DIV[data-click="box-filed"] UL li').click(function() {
+				    var index = items.index(this);
+				    
+				    if($('#'+name+' TABLE[data-table="'+name+'"] thead th:nth-child('+(index+1)+')').is(':visible'))
+					{ $(this).addClass("rowhide"); 
+					$('#'+name+' TABLE[data-table="'+name+'"] thead th:nth-child('+(index+1)+')').hide(); 
+					$('#'+name+' TABLE[data-table="'+name+'"] tbody td:nth-child('+(index+1)+')').hide();  }
+					else 
+					{ $(this).removeClass("rowhide"); 
+					$('#'+name+' TABLE[data-table="'+name+'"] thead th:nth-child('+(index+1)+')').show(); 
+					$('#'+name+' TABLE[data-table="'+name+'"] tbody td:nth-child('+(index+1)+')').show(); } 
+				});
+			}
+			function boxRefresh(el){
+				if(typeof(el) =='undefined') {
+					console.info('no element');
+					return false;
+				}
+				
+				$(el).attr('data-refresh',"before").children('DIV.overlay').show();
+				var url = 'category/views/viewContent';
+				var info = false;
+				$.ajax({
+					url: url,
+				  cache: false,
+					dataType: 'html',
+				  type: 'POST',
+				  data:{
+					  info:info
+				  },
+				  success: function(data){					
+					  $(el).before(data);  
+					  $('[data-refresh="before"]').remove();
+					  setBoxFiled('ProductCategory');					  
+				  }
+				});
+			}
+
+			function listsort(info){
+				var url = 'category/sort/';
+				$.ajax({
+					url: url,
+				  cache: false,
+					dataType: 'html',
+				  type: 'POST',
+				  data:{
+					  info:info
+				  },
+				  success: function(data){
+					 console.info(data);
+					 if(data = 'refresh') boxRefresh($('#ProductCategory'));;
+				  }
+				});
+
+			}
+
+			$('#ProductCategory button[data-click="item-sort"]').on('click',function(){
+
+				var parent_id = $(this).attr('data-id');
+				var item_el = '#ProductCategory .sortable[sort-id="'+parent_id+'"]';
+				var def_sort = [];
+				$(item_el+' .ui-sortable-handle').each(function(){
+					def_sort.push($(this).attr('data-id'));
+				});
+
+				if($(this).hasClass('bg-green')){
+
+					$(this).removeClass('bg-green');
+					
+					if($(this).attr('def_sort') != def_sort.toString() && confirm('change?')) {
+						var info = {
+								  before : $(this).attr('def_sort'),
+								  after  : def_sort.toString(),
+							  }
+						  
+						listsort(info);
+						$(item_el).sortable('disable');     
+						return false;
+						
+						      
+					}
+
+
+
+					boxRefresh($('#ProductCategory'));;
+					return false;
+					
+					
+					
+				}
+
+				
+				$(this).addClass('bg-green').attr('def_sort',def_sort.toString());
+				$(item_el).sortable("enable");
+				
+			});
+
+			
+			
+			$('#ProductCategory button[data-click="box-sort"]').on('click',function(){
+				
+				
+				var item_el = '#ProductCategory .sortable[sort-id="0"]';
+				var def_sort = [];
+				$(item_el+' .ui-sortable-handle').each(function(){
+					def_sort.push($(this).attr('data-id'));
+				});
+
+				if($(this).hasClass('bg-green')){
+
+					$(this).removeClass('bg-green');
+					
+					if($(this).attr('def_sort') != def_sort.toString() && confirm('change?')) {
+
+						var info = {
+								  before : $(this).attr('def_sort'),
+								  after  : def_sort.toString(),
+							  }
+						listsort(info);
+						$(item_el).sortable('disable');     
+						return false;
+						
+						      
+					}
+
+					boxRefresh($('#ProductCategory'));;
+					return false;
+				}
+
+
+
+				
+				$(this).addClass('bg-green').attr('def_sort',def_sort.toString());
+				$(item_el).sortable("enable");
+				
+			});
+			
+			
+			$('#ProductCategory button[data-click="item-insert"]').on('click',function(){
+
+				
+				if($('#insertBox').attr('data-check') < 1) return false;
+				var name =  $('#insertCategory').val();
+				var parent_category  = $('#ProductCategoryID').val();
+				
+				
+				var info = {
+					  name:name,
+					  parent_category:parent_category,
+				  }
+				 
+				var url = 'category/insert/';
+				$.ajax({
+					url: url,
+				  cache: false,
+					dataType: 'html',
+				  type: 'POST',
+				  data:{
+					  info:info
+				  },
+				  success: function(data){
+					 console.info(data);
+					 if(data = 'refresh') boxRefresh($('#ProductCategory'));;
+				  }
+				});
+				
+			})
+			</script>
+			
+		</div>

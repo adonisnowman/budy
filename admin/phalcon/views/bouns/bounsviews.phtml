@@ -1,0 +1,332 @@
+
+		<div id="Bouns" class="box box-normal box-solid" style="max-width: 600px;min-width: 330px;">
+			<div class="overlay" style="display: none;">
+				<i class="fa fa-refresh fa-spin"></i> 
+			</div>
+			<div class="box-header with-border">
+				<h3 class="box-title">Bouns</h3>								
+				<div class="box-tools pull-right">					
+					<button class="btn btn-box-tool" data-click="box-search" >
+						<i class="fa fa-search" data-toggle="tooltip" data-original-title="search"></i>					
+					</button>
+					<button class="btn btn-box-tool" data-click="box-refresh" >
+						<i class="fa fa-refresh" data-toggle="tooltip" data-original-title="refresh"></i>					
+					</button>
+					<div class="btn-group" data-click="box-filed" data-table="AdminPurviewlist_List">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                       			<i class="fa fa-table" data-toggle="tooltip" data-original-title="欄位顯示"></i>	
+                            </button>
+                            <ul class="dropdown-menu" ></ul>
+                    </div>					
+					<button class="btn btn-box-tool" data-widget="collapse">					
+						<i class="fa fa-minus"></i>
+					</button>
+					
+				</div>
+				
+			</div>
+			<!-- /.box-header -->
+			<div id="insertBox" class="direct-chat-primary" data-check="">							
+									<div class="input-group" style="width: 100%">
+									<?php if(isset($ProductCategory)):?>
+									 <select id="ProductCategory" class="form-control" list-form="category_id" data-type="value" onchange="boxRefresh($('#Bouns'));" style="width: 20%;min-width: 100px;">
+									<?php foreach ($ProductCategory AS $list):?>								
+	                        			<option value="<?php echo $list['id'];?>" <?php echo $list['selected'];?> ><?php echo $list['name'];?></option>  
+									<?php endforeach;?>
+									  </select>
+									<?php endif;?>
+									
+									 <input id="insertBouns" class="form-control" style="width: auto;max-width: 440px;"
+											placeholder="Type Account">							
+										
+									</div>
+									<div class="direct-chat-msg right">
+										<button class="btn btn-primary" data-click="item-insert">
+												<i class="fa fa-plus"></i>
+											</button>
+		                          		<div class="direct-chat-text" data-message>
+		                            		Type a name to create account
+		                          		</div>
+	                        		</div>
+	                        		
+                        		</div>
+			<div class="box-body no-padding">
+				<table class="table table-condensed" data-table="AdminPurviewlist_List">
+					<thead>
+						<tr>
+							<th style="width: 10px">#</th>
+							<th>video id</th>							
+							<th>標題</th>
+							<th>群組</th>
+							<th>時間</th>
+							<th>Purview</th>
+						</tr>
+					</thead>
+					<tbody>
+                    <?php if(isset($Bouns)):?>
+					<?php foreach ($Bouns AS $list):?>
+					<tr data-onshelf="<?php echo $list['onshelf_css'];?>">
+							<td><?php echo $list['id'];?></td>	
+							<td><?php echo $list['video_id'];?></td>	
+							<td><?php echo $list['title'];?></td>							
+							<td><?php echo $list['ProductCategory'];?></td>
+							<td><?php echo $list['start_time']."-".$list['end_time'];?></td>
+							
+							<td>				
+								<span>	
+								<?php if(isset($list['purviewAction'])):?>
+								<?php foreach ($list['purviewAction'] AS $action):?>
+								<button class="btn btn-box-tool" data-click="item-<?php echo $action['code'];?>" data-id="<?php echo $list['id'];?>"  >
+									<i class="fa <?php echo $action['icon'];?>" data-toggle="tooltip" title="" data-original-title="<?php echo $action['name'];?>"></i>
+								</button>
+								<?php endforeach;?>
+								<?php endif;?>
+							
+								</span>
+							</td>
+						</tr>
+					<?php endforeach;?>
+					<?php endif;?>
+                    
+                  </tbody>
+				  <tfoot>
+						<tr>
+							<td colspan="99">
+								
+							</td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+			
+			<script>
+
+			$('#Bouns button[data-click="item-edit"]').on('click',function(){
+
+				$('#Bouns button[data-click="item-edit"]').removeClass('bg-light-blue');
+				$(this).addClass('bg-light-blue');
+				var id = $(this).attr('data-id');
+				var url = 'jsonview/bounscheck';
+				var info = {
+						id: id,
+					};
+				
+				$.ajax({
+					url: url,
+				  cache: false,
+					dataType: 'json',
+				  type: 'POST',
+				  data:{
+					  info:info
+				  },
+				  success: function(data){	
+					  $('#Preview').attr('data-id',id);
+					  
+					  $('#preview_html').html(data['preview_html']);
+					  for(var k in data['preview']){
+						  var el = $('#Preview [preview="'+k+'"]');
+						  
+						  if(el.attr('data-type') == 'value') el.val(data['preview'][k]);	
+						  else el.html(data['preview'][k]);
+					  }
+					  
+				  }
+				});
+				
+			});
+			
+			$('#insertBouns').on('keyup',function(){
+							
+				var url = 'jsonview/bounscheck';
+				var info = {
+						video_id:$(this).val()
+				};
+				console.info($(this).val());
+				$.ajax({
+					url: url,
+				  cache: false,
+					dataType: 'json',
+				  type: 'POST',
+				  data:{
+					  info:info
+				  },
+				  success: function(data){	
+					  console.info(data);
+						if(data){
+							$('#preview_html').html(data['preview_html']);
+							for(var k in data['preview']){
+								$('#Preview [preview="'+k+'"]').html(data['preview'][k]);
+							}
+							Preview_autochain();
+							$('#insertBox').attr('class','direct-chat-'+data['css']).attr('data-check',data['check']);
+							$('#insertBox DIV[data-message]').html(data['message']);
+							$('#insertBox button[data-click="item-insert"]').attr('class','btn btn-'+data['css'])
+						}
+					  
+				  }
+				});
+				
+			});
+			function boxview(eId,info){
+
+				var el = $('#'+eId+'_Box');
+				
+				if(typeof(el) =='undefined') {
+					console.info('no element');
+					return false;
+				}
+				
+				$(el).attr('data-refresh',"before").children('DIV.overlay').show();
+				var url = 'boxview/'+eId;
+				
+				$.ajax({
+					url: url,
+				  cache: false,
+					dataType: 'html',
+				  type: 'POST',
+				  data:{
+					  info:info
+				  },
+				  success: function(data){					
+					  $(el).before(data);  
+					  $('[data-refresh="before"]').remove();			  
+				  }
+				});
+			}
+			
+						
+			$('#Bouns button[data-click="item-onshelf"],#Bouns button[data-click="item-offshelf"]').on('click',function(){
+				var this_el = $(this);
+				
+				var id =  $(this).attr('data-id');
+				var url = 'bouns/'+this_el.attr('data-click').replace('item-','');	
+				$.ajax({
+					url: url,
+				  cache: false,
+					dataType: 'html',
+				  type: 'POST',
+				  data:{
+					  id : id,
+				  },
+				  success: function(data){	
+					  if(data == 'offshelf' || data == 'onshelf') this_el.parents('tr').attr('data-onshelf',data);
+					  else console.info('error');
+				  }
+				});
+
+			});
+			
+			
+			
+			$('#Bouns button[data-click="item-insert"]').on('click',function(){
+
+				
+				if($('#insertBox').attr('data-check') < 1) return false;
+				var video_id =  $('#insertBouns').val();
+				var category_id  = $('#ProductCategory').val();
+				
+				var post = {}; 
+					$('#Preview [preview]').each(function(){						
+						post[$(this).attr("preview")] = $(this).val();
+					});				
+				
+				
+				var info = {
+					  video_id : video_id,
+					  category_id : category_id,
+					  post : post
+				  }
+				 
+				var url = 'bouns/insert/';
+				$.ajax({
+					url: url,
+				  cache: false,
+					dataType: 'html',
+				  type: 'POST',
+				  data:{
+					  info:info
+				  },
+				  success: function(data){
+					 console.info(data);
+					 $('#preview_html').html('');
+					 $('#Preview [preview]').html('');
+					 
+					 if(data = 'refresh') boxRefresh($('#Bouns'));;
+				  }
+				});
+				
+			});
+
+			function setBoxFiled(name) {
+
+				$('#'+name+' DIV[data-click="box-filed"] UL').html('');
+				
+				$('#'+name+' TABLE[data-table="'+name+'"] thead tr').find('TH').each(function(index){
+					var title=$(this).attr("title");
+					if(typeof(title) == "undefined") title=$(this).html();		
+					
+					var add_li = document.createElement('LI');
+					add_li.innerHTML='<a>'+title+'</a>';
+					
+					
+					if(typeof(title) != "undefined") {
+						$('#'+name+' DIV[data-click="box-filed"] UL').append(add_li);
+						if($(this).hasClass("rowhide")) $(add_li).addClass("rowhide");		
+					}
+					
+				    if($('#'+name+' TABLE[data-table="'+name+'"] thead th:nth-child('+(index+1)+')').hasClass("rowhide"))
+						{
+						$('#'+name+' TABLE[data-table="'+name+'"] thead th:nth-child('+(index+1)+')').hide();  
+						$('#'+name+' TABLE[data-table="'+name+'"] tbody td:nth-child('+(index+1)+')').hide();
+						}	
+				});
+
+				var items = $('#'+name+' DIV[data-click="box-filed"] UL li').click(function() {
+				    var index = items.index(this);
+				    
+				    if($('#'+name+' TABLE[data-table="'+name+'"] thead th:nth-child('+(index+1)+')').is(':visible'))
+					{ $(this).addClass("rowhide"); 
+					$('#'+name+' TABLE[data-table="'+name+'"] thead th:nth-child('+(index+1)+')').hide(); 
+					$('#'+name+' TABLE[data-table="'+name+'"] tbody td:nth-child('+(index+1)+')').hide();  }
+					else 
+					{ $(this).removeClass("rowhide"); 
+					$('#'+name+' TABLE[data-table="'+name+'"] thead th:nth-child('+(index+1)+')').show(); 
+					$('#'+name+' TABLE[data-table="'+name+'"] tbody td:nth-child('+(index+1)+')').show(); } 
+				});
+			}
+			function boxRefresh(el){
+				if(typeof(el) =='undefined') {
+					console.info('no element');
+					return false;
+				}
+				
+				$(el).attr('data-refresh',"before").children('DIV.overlay').show();
+				var url = 'bouns/views/viewContent';
+				var info = {};
+				$('#Bouns [list-form]').each(function(){				
+
+					if($(this).attr('data-type') == 'value') info[$(this).attr("list-form")] = $(this).val();		
+					else info[$(this).attr("list-form")] = $(this).html();
+				});
+
+				
+				$.ajax({
+					url: url,
+				  cache: false,
+					dataType: 'html',
+				  type: 'POST',
+				  data:{
+					  info:info
+				  },
+				  success: function(data){					
+					  $(el).before(data);  
+					  $('[data-refresh="before"]').remove();
+					  setBoxFiled('Bouns');					  
+				  }
+				});
+			}
+			
+			
+			</script>
+			
+		</div>

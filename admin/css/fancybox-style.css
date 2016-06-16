@@ -1,0 +1,261 @@
+.fancybox-background {
+	background: #ac7c5d url(../images/bg.jpg);
+}
+.fancybox-background .fancybox-skin{
+	background: url(../images/bg-top.jpg) repeat-x top center;	
+}
+.fancybox-inside-bg-bottom {
+	background: url(../images/side-bg-bottom.gif) no-repeat 173px bottom;
+	float: left;
+	padding-bottom: 25px;
+}
+
+.fancybox-inside-bg-top {
+	background: url(../images/side-bg-top.gif) no-repeat 177px top;
+	float: left;
+}
+
+.fancybox-inside {
+	background: url(../images/side-bg.gif) repeat-y 175px 0px;
+	float: left;
+}
+
+.fancybox-inside H2{
+	line-height: 20px;
+font-size: 18px;
+color: #000;
+float: right;
+text-shadow: 2px 2px 2px #c1c1c1;
+font-family: Century Gothic;
+font-weight: normal;
+margin: 20px 30px 0px 0px;
+	
+}
+.fancybox-content {
+	margin: auto;
+	width: 751px;
+	background-image: url(../images/content-bg-center.png);
+	margin-top: 45px;
+}
+
+.fancybox-content-bg-bottom {
+	background: url(../images/content-bg-bottom.png) no-repeat bottom center;
+	float: left;
+	padding-bottom: 20px;
+}
+
+div.slide {
+	display: none;
+}
+
+div.resume {
+	display: block;
+}
+
+div.contact {
+	display: none;
+}
+
+div.connect {
+	display: none;
+}
+
+.page-content {
+	float: left;
+	width: 700px;
+}
+
+.entry {
+	float: right;
+	width: 444px;
+	padding-bottom: 20px;
+	padding-top: 23px;
+	border-bottom: 1px solid #dbdbdb;
+	margin-right: 32px;
+	padding-left: 31px;
+}
+
+.connect-div {
+	padding-left: 0px;
+	width: 475px;
+	background: url(../images/line.gif) repeat-y top center;
+	border: none;
+	padding-bottom: 0px;
+}
+
+.connect-div span {
+	width: 237px;
+	height: 87px;
+	top: 0;
+	border-bottom: 1px solid #dbdbdb;
+	float: left;
+	position: relative;
+	z-index: 3;
+}
+
+.connect-div a {
+	display: block;
+	position: absolute;
+	z-index: 2;
+	top: 0;
+	left: 0;
+	width: 165px;
+	height: 67px;
+	float: left;
+	text-decoration: none;
+	color: #7e7e7e;
+	font-size: 18px;
+	padding: 20px 0px 0px 87px;
+}
+
+.connect-div a:hover {
+	color: #3a3a3a;
+}
+
+.connect-bg {
+	position: absolute;
+	z-index: 1;
+	display: none;
+}
+
+.connect-div a img {
+	left: 0;
+	float: left;
+	margin-right: 10px;
+}
+
+.entry ul {
+	float: left;
+	width: 100%;
+	margin: 15px 0px 0px 0px;
+	padding: 0;
+}
+
+.entry ul li {
+	float: left;
+	width: 190px;
+	display: block;
+	padding: 10px 0px 0px 30px;
+	background: url(../images/check_green.png) no-repeat left;
+}
+
+.fancybox-header {
+	background: url(../images/content-bg-top.png) no-repeat top center;
+	min-height: 200px;
+	position: relative;
+	margin-top: -41px;
+	float: left;
+	width: 751px;
+}
+
+.fancybox-logo {
+	position: relative;
+	float: left;
+	margin-left: 90px;
+	color: #b3b3b3;
+}
+
+.logo {
+	padding-bottom: 6px;
+	border-bottom: 1px solid #dbdbdb;
+}
+
+.avatar {
+	float: left;
+	background-image: url(../images/photo-bg.gif);
+	padding: 7px 13px 15px 7px;
+	margin-right: 15px;
+}
+
+.overlay {
+	position: absolute;
+	top: -13px;
+	left: -17px;
+}
+
+.fancybox-header ul {
+	float: right;
+	list-style: none;
+	margin: 40px 30px 0px 0px;
+}
+
+.fancybox-header ul li {
+	display: block;
+	float: left;
+	margin-right: 5px;
+	height: 24px;
+}
+
+.fancybox-header ul li.active {
+	background: url(../images/nav-bg-left.png) no-repeat left;
+}
+
+.fancybox-header ul li a {
+	text-transform: lowercase;
+	display: block;
+	float: left;
+	text-decoration: none;
+	color: #a9a4a4;
+	font-family: Century Gothic;
+	height: 21px;
+	padding: 3px 10px 0px 10px;
+}
+
+.fancybox-header ul li a:hover {
+	color: #484848;
+}
+
+.fancybox-header ul li.active a {
+	background: url(../images/nav-bg-right.png) no-repeat top right;
+	color: #484848;
+	text-shadow: 1px 1px #fff;
+	height: 21px;
+	padding: 3px 10px 0px 10px;
+}
+
+.gallery-item {
+	width: 75px;
+	height: 75px;
+	position: relative;
+	float: left;
+	margin: 0px 13px 17px 0px;
+	display: block;
+}
+
+.gallery-item img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: 8px;
+	background-color: #f6f6f6;
+	border: 1px dashed #b2b2b2;
+	-webkit-box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+}
+
+.gallery-item:hover img {
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+}
+
+.features-hover {
+	display: none;
+	position: absolute;
+	padding: 8px;
+	background: #fff;
+	-webkit-border-radius: 8px;
+	-webkit-box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.25);
+	-moz-border-radius: 8px;
+	-moz-box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.25);
+	z-index: 5;
+}
+
+.clear {
+	clear: both;
+}
+
+.et_embedded_videos {
+	display: none !important;
+}
